@@ -11,6 +11,7 @@ finger_gun_bp = Blueprint('finger_gun', __name__, url_prefix='/finger_gun')
 # Global Mediapipe initialization
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
+hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.6)
 
 @finger_gun_bp.route('/')
 def index():
@@ -21,7 +22,6 @@ def index():
 def video_feed():
     try:
         
-        hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.6, max_num_hands=1)
         drawing = mp_drawing #Use the module directly.
 
         data = request.get_json()
