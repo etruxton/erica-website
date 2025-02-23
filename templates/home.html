@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome!</h1>
+        <div class="button-container">
+            <a href="{{ url_for('bullet_hell.index') }}" class="button">OpenCV Bullet Hell</a>
+            <a href="{{ url_for('finger_gun.index') }}" class="button">OpenCV Finger Gun</a>
+            <a href="https://twistedvisionsstudio.com" class="button" target="_blank">Twisted Visions Studio</a>
+        </div>
+    </div>
+</body>
+</html>
