@@ -10,9 +10,6 @@ import os
 finger_gun_bp = Blueprint('finger_gun', __name__, url_prefix='/finger_gun')
 #finger_gun_bp.secret_key = os.urandom(24) # Generate a secret key
 
-mp_hands = mp.solutions.hands
-hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.6, max_num_hands=1)
-mp_drawing = mp.solutions.drawing_utils
 
 frame_width = 640
 frame_height = 480
@@ -54,6 +51,10 @@ def is_finger_gun(hand_landmarks, frame_width, frame_height, session):
         return False, None, None, None, None
 
 def process_frame(frame, session):
+    mp_hands = mp.solutions.hands
+    mp_drawing = mp.solutions.drawing_utils
+    hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.6, max_num_hands=1)
+
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     image.flags.writeable = False
     results = hands.process(image)
@@ -101,6 +102,8 @@ def process_frame(frame, session):
         session['previous_thumb_y'] = None
         session['previous_time'] = 0
 
+
+    hands.close() #Close the mediapipe hands model.
     return image
 
 @finger_gun_bp.route('/')
