@@ -16,8 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const outputContext = outputCanvas.getContext('2d');
 
     let targetFps = 15; // Initial FPS
-    let intervalId;
-    let startTime;
+    let lastFrameTime = 0;
 
     async function getWebcam() {
         try {
@@ -29,7 +28,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     async function sendFrame() {
-        startTime = performance.now(); // Record start time
+        if (document.visibilityState !== 'visible') {
+            return; // Skip frame if tab is not visible
+        }
+
+        const startTime = performance.now();
         captureContext.drawImage(video, 0, 0, captureCanvas.width, captureCanvas.height);
         const frameData = captureCanvas.toDataURL('image/jpeg', 0.8);
         const frameBase64 = frameData.split(',')[1];
@@ -59,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 adjustFps(responseTime); // Adjust FPS based on response time
-
             } else {
                 console.error('Error sending frame:', response.status);
             }
@@ -69,30 +71,40 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function adjustFps(responseTime) {
-        let newFps = targetFps; // Start with the current target FPS
-    
-        if (responseTime > 200) {
+        let newFps = targetFps;
+
+        if (responseTime > 150) {
             newFps = 10;
-            console.log("Response time > 200ms, setting FPS to 10");
-        } else if (responseTime <= 100) {
-            newFps = 30;
-            console.log("Response time <= 100ms, setting FPS to 30");
+        } else if (responseTime <= 50) {
+            newFps = 20;
         } else {
             newFps = 15;
-            console.log("Response time between 100ms and 200ms, setting FPS to 15");
         }
-    
-        // Always update the FPS if it's different
+
         if (newFps !== targetFps) {
             targetFps = newFps;
-            clearInterval(intervalId);
-            intervalId = setInterval(sendFrame, 1000 / targetFps);
+            //console.log("New FPS: ", targetFps);
         }
+    }
+
+    function frameLoop(timestamp) {
+        if (!lastFrameTime) {
+            lastFrameTime = timestamp;
+        }
+
+        const deltaTime = timestamp - lastFrameTime;
+
+        if (deltaTime >= (1000 / targetFps)) {
+            sendFrame();
+            lastFrameTime = timestamp;
+        }
+
+        requestAnimationFrame(frameLoop);
     }
 
     getWebcam();
 
     video.addEventListener('loadeddata', () => {
-        intervalId = setInterval(sendFrame, 1000 / targetFps); // Initial interval
+        requestAnimationFrame(frameLoop); // Start the frame loop
     });
 });
