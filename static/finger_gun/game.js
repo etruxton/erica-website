@@ -69,19 +69,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function adjustFps(responseTime) {
-        let newFps = targetFps;
-
-        if (responseTime > 200 && targetFps !== 10) {
+        let newFps = targetFps; // Start with the current target FPS
+    
+        if (responseTime > 200) {
             newFps = 10;
             console.log("Response time > 200ms, setting FPS to 10");
-        } else if (responseTime <= 100 && targetFps !== 30) {
+        } else if (responseTime <= 100) {
             newFps = 30;
             console.log("Response time <= 100ms, setting FPS to 30");
-        } else if(responseTime <= 200 && responseTime > 100 && targetFps !== 15){
+        } else {
             newFps = 15;
             console.log("Response time between 100ms and 200ms, setting FPS to 15");
         }
-
+    
+        // Always update the FPS if it's different
         if (newFps !== targetFps) {
             targetFps = newFps;
             clearInterval(intervalId);
