@@ -1,0 +1,105 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f9;
+    margin: 0;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.header p {
+    color: #555;
+    line-height: 1.6;
+}
+
+.projects-container {
+    display: flex;
+    max-width: 900px;
+    margin: 20px auto;
+}
+
+.project-list {
+    list-style: none;
+    padding: 0;
+    width: 30%; /* Adjust as needed */
+}
+
+.project-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.project-item:hover {
+    background-color: #e0f0ff;
+}
+
+.project-details {
+    width: 70%; /* Adjust as needed */
+    padding: 20px;
+    border-left: 1px solid #ddd;
+}
+
+.project-details .description {
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.project-details .button-container {
+    margin-top: 15px;
+    display: flex;
+    justify-content: left;
+}
+
+.demo-button, .read-more-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.demo-button {
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+}
+
+.demo-button:hover {
+    background-color: #0056b3;
+}
+
+.read-more-button {
+    background-color: #e0f0ff;
+    color: #333;
+}
+
+.read-more-button:hover {
+    background-color: #cce0f5;
+}
+
+.custom-cursor {
+    display: none; /* Initially hide the cursor */
+    font-size: 1em; /* Adjust as needed */
+    margin-left: 2px; /* Adjust as needed */
+}
+
+.typed-cursor {
+    font-size: 1em; /* Adjust as needed */
+    margin-left: 2px; /* Adjust as needed */
+    vertical-align: baseline; /* Try baseline alignment */
+    /* Add this if it is still below text */
+    position: relative;
+    top: -2px; /* Adjust as needed */
+    width: auto;
+}

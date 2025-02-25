@@ -1,17 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <title>Home - Erica Truxton's App Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home/style.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome!</h1>
-        <div class="button-container">
-            <a href="{{ url_for('bullet_hell.index') }}" class="button">OpenCV Bullet Hell</a>
-            <a href="{{ url_for('finger_gun.index') }}" class="button">OpenCV Finger Gun</a>
-            <a href="https://twistedvisionsstudio.com" class="button" target="_blank">Twisted Visions Studio</a>
+    <div class="header">
+        <h1>Erica Truxton</h1>
+        <p>Welcome to Erica's personal website! This is where I take a crack at web development. Website is very WIP.</p>
+    </div>
+
+    <div class="projects-container">
+        <ul class="project-list">
+            <li class="project-item" data-description="A fast-paced bullet dodging game using OpenCV." data-demo-link="{{ url_for('bullet_hell.index') }}">OpenCV Bullet Hell</li>
+            <li class="project-item" data-description="Use your fingers to shoot targets in this fun interactive app." data-demo-link="{{ url_for('finger_gun.index') }}">OpenCV Finger Gun</li>
+            <li class="project-item" data-description="My portfolio and creative projects." data-demo-link="https://twistedvisionsstudio.com" data-target="_blank">Twisted Visions Studio</li>
+        </ul>
+
+        <div class="project-details">
+            <span class="description">
+                <span class="custom-cursor">|</span>
+            </span>
+            <div class="button-container">
+                <a class="demo-button">Demo</a>
+                <button class="read-more-button">Read More &#8594;</button>
+            </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="{{ url_for('static', filename='home/home.js') }}"></script>
 </body>
 </html>
