@@ -6,21 +6,20 @@
 </head>
 <body>
     <div class="header">
-        <h1>Erica Truxton</h1>
+        <img src="/static/home/assets/images/confuso.jpg" alt="Profile Picture" class="profile-pic">
+        <h1>Hi, I'm Erica! <span class="waving-emoji">👋</span></h1>
         <p>Welcome to Erica's personal website! This is where I take a crack at web development. Website is very WIP.</p>
     </div>
 
     <div class="projects-container">
         <ul class="project-list">
-            <li class="project-item" data-description="A fast-paced bullet dodging game using OpenCV." data-demo-link="{{ url_for('bullet_hell.index') }}">OpenCV Bullet Hell</li>
+            <li class="project-item" data-description="Control a player with a real-life object in a bullet dodging game using OpenCV." data-demo-link="{{ url_for('bullet_hell.index') }}">OpenCV Bullet Hell</li>
             <li class="project-item" data-description="Use your fingers to shoot targets in this fun interactive app." data-demo-link="{{ url_for('finger_gun.index') }}">OpenCV Finger Gun</li>
-            <li class="project-item" data-description="My portfolio and creative projects." data-demo-link="https://twistedvisionsstudio.com" data-target="_blank">Twisted Visions Studio</li>
+            <li class="project-item" data-description="An art portfolio that showcases a family member's chicken wire sculptures, built with React and hosted on AWS S3." data-demo-link="https://twistedvisionsstudio.com" data-target="_blank">Twisted Visions Studio</li>
         </ul>
 
         <div class="project-details">
-            <span class="description">
-                <span class="custom-cursor">|</span>
-            </span>
+            <span class="description"></span>
             <div class="button-container">
                 <a class="demo-button">Demo</a>
                 <button class="read-more-button">Read More &#8594;</button>

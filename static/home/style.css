@@ -29,7 +29,7 @@ body {
 .project-list {
     list-style: none;
     padding: 0;
-    width: 30%; /* Adjust as needed */
+    width: 30%;
 }
 
 .project-item {
@@ -43,7 +43,7 @@ body {
 }
 
 .project-details {
-    width: 70%; /* Adjust as needed */
+    width: 70%;
     padding: 20px;
     border-left: 1px solid #ddd;
 }
@@ -88,18 +88,81 @@ body {
     background-color: #cce0f5;
 }
 
-.custom-cursor {
-    display: none; /* Initially hide the cursor */
-    font-size: 1em; /* Adjust as needed */
-    margin-left: 2px; /* Adjust as needed */
+.typed-cursor {
+    font-size: 1em;
+    margin-left: 2px;
+    vertical-align: baseline;
+    position: relative;
+    top: -2px;
+    width: auto;
 }
 
-.typed-cursor {
-    font-size: 1em; /* Adjust as needed */
-    margin-left: 2px; /* Adjust as needed */
-    vertical-align: baseline; /* Try baseline alignment */
-    /* Add this if it is still below text */
-    position: relative;
-    top: -2px; /* Adjust as needed */
-    width: auto;
+/* Media Queries for Mobile Responsiveness */
+
+@media (max-width: 768px) {
+    .projects-container {
+        flex-direction: column; /* Stack project list and details vertically */
+        margin: 10px auto; /* Reduce margins */
+    }
+
+    .project-list {
+        width: 100%; /* Project list takes full width */
+    }
+
+    .project-details {
+        width: 100%; /* Project details take full width */
+        border-left: none; /* Remove left border */
+        border-top: 1px solid #ddd; /* Add top border */
+        padding: 10px; /* Reduce padding */
+    }
+
+    .demo-button, .read-more-button {
+        padding: 8px 16px; /* Reduce button padding */
+        font-size: 14px; /* Reduce button font size */
+    }
+
+    body {
+        padding: 10px; /* Reduce body padding */
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 1.8em; /* Further reduce header font size */
+    }
+
+    .header p {
+        font-size: 0.9em; /* Further reduce paragraph font size */
+    }
+}
+.waving-emoji {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    transform-origin: 70% 70%;	/* Pivot around the bottom-left palm */
+}
+
+.waving-emoji:hover,
+.waving-emoji.waving { /* Add waving class */
+    animation: wave 1s infinite linear;
+}
+
+@keyframes wave {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(20deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-20deg); }
+    100% { transform: rotate(0deg); }
+}
+.profile-pic {
+    width: 70px; /* Adjust size as needed */
+    height: 70px; /* Adjust size as needed */
+    border-radius: 50%; /* Make it a circle */
+    object-fit: cover; /* Maintain aspect ratio */
+    margin-right: 20px; /* Add spacing */
+    vertical-align: middle; /* Align with header text */
+    display: inline-block; /* allows margin and sizing*/
+}
+
+.header h1 {
+    display: inline-block; /* allows vertical align to work */
 }
