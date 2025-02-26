@@ -4,6 +4,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const description = document.querySelector('.project-details .description');
     const demoButton = document.querySelector('.project-details .demo-button');
     const readMoreButton = document.querySelector('.project-details .read-more-button');
+    const projectDisplayImage = document.querySelector('.project-image-display .project-display-image');
+    const overlay = document.querySelector('.image-overlay');
+    const enlargedImage = overlay.querySelector('img');
 
     let currentProject = null;
     let typedInstance = null;
@@ -22,13 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const desc = item.getAttribute('data-description');
             const demoLink = item.getAttribute('data-demo-link');
             const target = item.getAttribute('data-target') || "_self";
+            const imageSrc = item.getAttribute('data-image'); // Get image source
 
             // Update demoButton href and target immediately
             demoButton.href = demoLink;
             demoButton.target = target;
 
-             // Update button text and hide "Read More" for "Twisted Visions Studio"
-             if (item.textContent.trim() === 'Twisted Visions Studio') {
+            // Update button text and hide "Read More" for "Twisted Visions Studio"
+            if (item.textContent.trim() === 'Twisted Visions Studio') {
                 demoButton.textContent = 'Visit';
             } else {
                 demoButton.textContent = 'Demo';
@@ -40,6 +44,10 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             description.textContent = ''; // Clear description
+
+            // Fade out the image immediately
+            projectDisplayImage.classList.remove('fade-in');
+            projectDisplayImage.classList.add('fade-out');
 
             // Introduce typos and corrections
             let typedText = '';
@@ -53,24 +61,38 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             typedInstance = new Typed(description, {
-                strings: [typedText, desc], // Type with typos, then correct
-                typeSpeed: 1,
-                backSpeed: 0,
-                backDelay: function() { // Random backDelay
-                    return Math.random() * 1000 + 100; // Random delay between 100ms and 1000ms
+                strings: [typedText, desc],
+                typeSpeed: 10,
+                backSpeed: 8,
+                backDelay: function() {
+                    return Math.random() * 1000 + 100;
                 },
                 showCursor: true,
-                cursorChar: '|'
-                ,
+                cursorChar: '|',
                 onComplete: function(self) {
-                  /*const cursor = document.querySelector('.typed-cursor');
-                  if (cursor) {
-                      cursor.style.display = 'none';
-                  }*/
+                    // Fade in the image when typing is complete
+                    if (imageSrc) {
+                        projectDisplayImage.src = imageSrc; // Set image source after fade in
+                        projectDisplayImage.classList.remove('fade-out');
+                        projectDisplayImage.classList.add('fade-in');
+                    }
                 }
+            });
+
+            // Add click event listener to image
+            projectDisplayImage.addEventListener('click', function() {
+                enlargedImage.src = imageSrc;
+                overlay.classList.add('active');
+                document.body.classList.add('blur');
             });
         }
     }
+
+    // Add click event listener to overlay
+    overlay.addEventListener('click', function() {
+        overlay.classList.remove('active');
+        document.body.classList.remove('blur');
+    });
 
     projectItems.forEach(item => {
         item.addEventListener('mouseover', function() {

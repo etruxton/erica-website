@@ -3,29 +3,40 @@
 <head>
     <title>Home - Erica Truxton's App Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='home/style.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <div class="header">
-        <img src="/static/home/assets/images/confuso.jpg" alt="Profile Picture" class="profile-pic">
-        <h1>Hi, I'm Erica! <span class="waving-emoji">👋</span></h1>
-        <p>Welcome to Erica's personal website! This is where I take a crack at web development. Website is very WIP.</p>
-    </div>
+    <div class="content">
+        <div class="header">
+            <img src="/static/home/assets/images/confuso.jpg" alt="Profile Picture" class="profile-pic">
+            <h1>Hi, I'm Erica <span class="waving-emoji">👋</span></h1>
+            <p>Welcome to Erica's personal website! This is where I take a crack at web development. Website is very WIP.</p>
+        </div>
 
-    <div class="projects-container">
-        <ul class="project-list">
-            <li class="project-item" data-description="Control a player with a real-life object in a bullet dodging game using OpenCV." data-demo-link="{{ url_for('bullet_hell.index') }}">OpenCV Bullet Hell</li>
-            <li class="project-item" data-description="Use your fingers to shoot targets in this fun interactive app." data-demo-link="{{ url_for('finger_gun.index') }}">OpenCV Finger Gun</li>
-            <li class="project-item" data-description="An art portfolio that showcases a family member's chicken wire sculptures, built with React and hosted on AWS S3." data-demo-link="https://twistedvisionsstudio.com" data-target="_blank">Twisted Visions Studio</li>
-        </ul>
+        <div class="projects-container">
+            <ul class="project-list">
+                <li class="project-item" data-description="Control a player with a real-life object in a bullet dodging game using OpenCV." data-demo-link="{{ url_for('bullet_hell.index') }}" data-image="/static/home/assets/images/bullet_hell.png">OpenCV Bullet Hell</li>
+                <li class="project-item" data-description="Use your fingers to shoot targets in this fun interactive app." data-demo-link="{{ url_for('finger_gun.index') }}" data-image="/static/home/assets/images/finger_gun.png">OpenCV Finger Gun</li>
+                <li class="project-item" data-description="An art portfolio that showcases a family member's chicken wire sculptures, built with React and hosted on AWS S3." data-demo-link="https://twistedvisionsstudio.com" data-target="_blank" data-image="/static/home/assets/images/twistedvisionsstudio.png">Twisted Visions Studio</li>
+            </ul>
 
-        <div class="project-details">
-            <span class="description"></span>
-            <div class="button-container">
-                <a class="demo-button">Demo</a>
-                <button class="read-more-button">Read More &#8594;</button>
+            <div class="project-details">
+                <span class="description"></span>
+                <div class="button-container">
+                    <a class="demo-button">Demo</a>
+                    <button class="read-more-button">Read More &#8594;</button>
+                </div>
+            </div>
+            <div class="project-image-display">
+                <img src="" alt="Project Image" class="project-display-image">
             </div>
         </div>
     </div>
+
+    <div class="image-overlay">
+        <img src="" alt="Enlarged Image" class="enlarged-image">
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <script src="{{ url_for('static', filename='home/home.js') }}"></script>
 </body>
