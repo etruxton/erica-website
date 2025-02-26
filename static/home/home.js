@@ -63,10 +63,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 cursorChar: '|'
                 ,
                 onComplete: function(self) {
-                  const cursor = document.querySelector('.typed-cursor');
+                  /*const cursor = document.querySelector('.typed-cursor');
                   if (cursor) {
                       cursor.style.display = 'none';
-                  }
+                  }*/
                 }
             });
         }
