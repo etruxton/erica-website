@@ -70,11 +70,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 showCursor: true,
                 cursorChar: '|',
                 onComplete: function(self) {
-                    // Fade in the image when typing is complete
+                    // Preload the new image before fading in
                     if (imageSrc) {
-                        projectDisplayImage.src = imageSrc; // Set image source after fade in
-                        projectDisplayImage.classList.remove('fade-out');
-                        projectDisplayImage.classList.add('fade-in');
+                        const newImage = new Image();
+                        newImage.onload = function() {
+                            projectDisplayImage.src = imageSrc;
+                            projectDisplayImage.classList.remove('fade-out');
+                            projectDisplayImage.classList.add('fade-in');
+                        };
+                        newImage.src = imageSrc;
                     }
                 }
             });
