@@ -91,9 +91,10 @@ html, body { /* Make overlay cover whole body */
     max-width: 90%;
     max-height: 90%;
     object-fit: contain;
-    transition: transform 0.3s ease; /* Remove opacity transition */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Add opacity transition */
     visibility: hidden; /* Hide by default */
     pointer-events: none; /* Disable pointer events by default */
+    opacity: 0; /* Set opacity to 0 */
 }
 
 .project-display-image:hover {
@@ -103,11 +104,13 @@ html, body { /* Make overlay cover whole body */
 .project-display-image.fade-in {
     visibility: visible;
     pointer-events: auto; /* Enable pointer events */
+    opacity: 1; /* Fade in */
 }
 
 .project-display-image.fade-out {
     visibility: hidden;
     pointer-events: none;
+    opacity: 0; /* Fade out */
 }
 
 .project-list {
