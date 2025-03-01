@@ -63,6 +63,8 @@ html, body { /* Make overlay cover whole body */
     display: flex;
     max-width: 900px;
     margin: 20px auto;
+    height: 150px; /* Set a fixed height */
+    overflow: hidden; /* Prevent content from overflowing */
 }
 
 .project-details {
@@ -204,13 +206,16 @@ html, body { /* Make overlay cover whole body */
 
 @media (max-width: 720px) {
     .projects-container {
-        flex-direction: column; /* Stack project details and image vertically */
+        flex-direction: column; /* Stack project list and details vertically */
+        margin: 10px auto; /* Reduce margins */
+        height: 700px; /* Set a fixed height */
     }
 
     .project-details {
         width: 100%; /* Project details take full width */
         border-left: none; /* Remove left border */
         border-bottom: 1px solid #ddd; /* Add bottom border */
+        border-top: 1px solid #ddd; /* Add top border */
     }
 
     .project-image-display {
@@ -221,16 +226,13 @@ html, body { /* Make overlay cover whole body */
     .project-display-image {
         max-width: 80%; /* Limit image width */
         max-height: 250px; /* Limit image height */
+        margin-top: 15px; /* Add spacing */
     }
 }
 
 /* Media Queries for Mobile Responsiveness */
 
 @media (max-width: 480px) {
-    .projects-container {
-        flex-direction: column; /* Stack project list and details vertically */
-        margin: 10px auto; /* Reduce margins */
-    }
 
     .project-list {
         width: 100%; /* Project list takes full width */
