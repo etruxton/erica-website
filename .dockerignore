@@ -1,3 +1,15 @@
-.git
-__pycache__
+# Ignore Python cache files
+__pycache__/
 *.pyc
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore IDE files
+.idea/
+.vscode/
+
+# Ignore local logs and data
+logs/
+data/

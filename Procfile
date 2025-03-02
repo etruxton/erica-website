@@ -1,1 +1,1 @@
-web: gunicorn --bind :$PORT --workers 1 --threads 10 main:app
+web: gunicorn --bind :$PORT --workers 1 -k eventlet main:app

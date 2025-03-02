@@ -13,4 +13,11 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install\
     libglib2.0-0 -y && \
     rm -rf /var/lib/apt/lists/*
 
-CMD ["gunicorn", "main:app"]
+# Set environment variable to suppress MediaPipe GPU warnings
+ENV GLOG_minloglevel=2
+
+# Expose the port your app runs on
+EXPOSE 5000
+
+# Run Gunicorn and bind to 0.0.0.0:5000
+CMD ["gunicorn", "-k", "eventlet", "-w", "1", "--bind", "0.0.0.0:5000", "main:app"]
