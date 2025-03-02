@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const projectDisplayImage = document.querySelector('.project-image-display .project-display-image');
     const overlay = document.querySelector('.image-overlay');
     const enlargedImage = overlay.querySelector('img');
+    const profilePicContainer = document.querySelector(".profile-pic-container");
+    const confettiContainer = document.querySelector(".confetti-container");
 
     let currentProject = null;
     let typedInstance = null;
@@ -123,5 +125,77 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.classList.remove('waving'); // Remove the class after 2 seconds
             }, 2000); // 2000 milliseconds = 2 seconds
         });
+    }
+
+    let isConfettiTriggered = false; // Prevent multiple confetti explosions
+    let isHovering = false; // Check if the mouse is hovering over the profile picture
+
+    // Listen for the transitionend event on the :after pseudo-element
+    profilePicContainer.addEventListener("transitionend", function (e) {
+        if (!isConfettiTriggered && isHovering) {
+            isConfettiTriggered = true;
+            explodeConfetti();
+        }
+    });
+
+    // Reset the trigger when the hover ends
+    profilePicContainer.addEventListener("mouseleave", function () {
+        isConfettiTriggered = false;
+        isHovering = false;
+    });
+
+    profilePicContainer.addEventListener("mouseenter", function () {
+        isHovering = true;
+    });
+
+    // For mobile devices, handle click-and-hold
+    profilePicContainer.addEventListener("mouseup", function () {
+        isConfettiTriggered = false;
+        isHovering = false;
+    });
+
+    function explodeConfetti() {
+        const numConfetti = 20; // Number of question marks
+    
+        // Calculate the center of the profilePicContainer
+        const profilePicRect = profilePicContainer.getBoundingClientRect();
+        const centerX = profilePicRect.left + profilePicRect.width / 2; // Horizontal center
+        const centerY = profilePicRect.top + profilePicRect.height / 2; // Vertical center
+    
+        // List of random colors
+        const colors = ["#007bff", "#ff0000", "#00ff00", "#ff00ff", "#ff8c00", "#00ffff", "#800080", "#ffff00"];
+    
+        for (let i = 0; i < numConfetti; i++) {
+            const confetti = document.createElement("div");
+            confetti.classList.add("confetti");
+            confetti.textContent = "?";
+    
+            // Assign a random color from the list
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.color = randomColor;
+    
+            // Calculate random angle and distance for outward movement
+            const angle = Math.random() * 2 * Math.PI; // Random angle in radians
+            const distance = Math.random() * 200 + 100; // Increase distance (100px to 300px)
+    
+            // Set starting position to the center of the screen
+            confetti.style.left = `${centerX}px`;
+            confetti.style.top = `${centerY}px`;
+    
+            // Set movement direction using CSS custom properties
+            confetti.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+            confetti.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
+    
+            // Add random rotation
+            const randomRotation = Math.random() * 360; // Random rotation between 0 and 360 degrees
+            confetti.style.setProperty("--rotate", `${randomRotation}deg`);
+    
+            confettiContainer.appendChild(confetti);
+    
+            // Remove confetti after animation ends
+            confetti.addEventListener("animationend", function () {
+                confetti.remove();
+            });
+        }
     }
 });
