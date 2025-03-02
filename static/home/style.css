@@ -1,0 +1,328 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f9;
+    margin: 0;
+    padding: 20px;
+    font-size: 16px; /* Fixed font size */
+}
+
+.header {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center children horizontally */
+    text-align: center; /* Center text within the header */
+    margin-bottom: 30px;
+    min-width: 342px; /* Prevent squishing on small screens */
+}
+
+.header-top {
+    display: flex;
+    align-items: center; /* Vertically center profile pic and h1 */
+    margin-bottom: 10px; /* Space between h1 and p */
+}
+
+.header h1 {
+    color: #333;
+    margin: 0; /* Remove default margin */
+}
+
+.header p {
+    color: #555;
+    line-height: 1.6;
+    margin: 0; /* Remove default margin */
+}
+
+.image-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-overlay.active {
+    visibility: visible;
+    opacity: 1;
+}
+
+.image-overlay img {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    filter: none; /* Remove blur from the image */
+}
+
+body.blur .content { /* Apply blur to content div */
+    filter: blur(5px);
+}
+
+html, body { /* Make overlay cover whole body */
+    height: 100%;
+    margin: 0;
+    overflow: hidden; /* Prevent scrolling when overlay is active */
+}
+.projects-container {
+    display: flex;
+    max-width: 900px;
+    margin: 20px auto;
+    height: 150px; /* Set a fixed height */
+    overflow: hidden; /* Prevent content from overflowing */
+}
+
+.project-details {
+    width: 70%; /* Adjust width for text */
+    padding: 20px;
+    border-left: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.project-details .description {
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 16px;
+    white-space: normal; /* Allow text wrapping */
+}
+
+.project-image-display {
+    width: 30%; /* Adjust width for image */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+}
+
+.project-display-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Add opacity transition */
+    visibility: hidden; /* Hide by default */
+    pointer-events: none; /* Disable pointer events by default */
+    opacity: 0; /* Set opacity to 0 */
+}
+
+.project-display-image:hover {
+    transform: scale(1.1);
+}
+
+.project-display-image.fade-in {
+    visibility: visible;
+    pointer-events: auto; /* Enable pointer events */
+    opacity: 1; /* Fade in */
+}
+
+.project-display-image.fade-out {
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0; /* Fade out */
+}
+
+.project-list {
+    list-style: none;
+    padding: 0;
+    width: 30%;
+}
+
+.project-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.project-item:hover {
+    background-color: #e0f0ff;
+}
+
+.project-details .button-container {
+    margin-top: 15px;
+    display: flex;
+    justify-content: left;
+}
+
+.demo-button, .read-more-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px; /* Fixed font size */
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+}
+
+.demo-button {
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+}
+
+.demo-button:hover {
+    background-color: #0056b3;
+}
+
+.read-more-button {
+    background-color: #e0f0ff;
+    color: #333;
+}
+
+.read-more-button:hover {
+    background-color: #cce0f5;
+}
+
+.typed-cursor {
+    font-size: 1em;
+    margin-left: 2px;
+    vertical-align: baseline;
+    position: relative;
+    top: -2px;
+    width: auto;
+}
+
+.waving-emoji {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    transform-origin: 70% 70%; /* Pivot around the bottom-left palm */
+}
+
+.waving-emoji:hover,
+.waving-emoji.waving { /* Add waving class */
+    animation: wave 0.8s infinite linear;
+}
+
+@keyframes wave {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(20deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-20deg); }
+    100% { transform: rotate(0deg); }
+}
+
+
+@property --my-border {
+    syntax: "<percentage>"; /* its type */
+    inherits: false;
+    initial-value: 0%; /* the initial value */
+}
+
+.profile-pic-container {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    margin-right: 20px;
+}
+
+.profile-pic {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-pic-container:after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+        #007bff 0%,
+        #007bff var(--my-border),
+        transparent var(--my-border),
+        transparent 100%
+    );
+    transform: rotate(-180deg) scale(-1, 1);
+    transition: --my-border 1.5s ease, opacity 1.5s ease; /* Add opacity transition */
+}
+
+.profile-pic-container:hover:after,
+.profile-pic-container:active:after {
+    --my-border: 100%;
+}
+
+.confetti-container {
+    position: fixed; /* Cover the entire screen */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.confetti {
+    position: absolute;
+    font-size: 20px;
+    opacity: 0;
+    animation: confetti-explode 1.5s ease-out;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+@keyframes confetti-explode {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--x, 0), var(--y, 0)) rotate(var(--rotate, 0deg)) scale(2);
+    }
+}
+
+/* Media Queries for Mobile Responsiveness */
+@media (max-width: 720px) {
+    .projects-container {
+        flex-direction: column; /* Stack project list and details vertically */
+        margin: 10px auto; /* Reduce margins */
+        height: 700px; /* Set a fixed height */
+    }
+
+    .project-details {
+        width: 100%; /* Project details take full width */
+        border-left: none; /* Remove left border */
+        border-bottom: 1px solid #ddd; /* Add bottom border */
+        border-top: 1px solid #ddd; /* Add top border */
+    }
+
+    .project-image-display {
+        width: 100%; /* Image display takes full width */
+        min-height: 200px; /* Ensure space is reserved */
+    }
+
+    .project-display-image {
+        max-width: 80%; /* Limit image width */
+        max-height: 250px; /* Limit image height */
+        margin-top: 15px; /* Add spacing */
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .project-list {
+        width: 100%; /* Project list takes full width */
+    }
+
+    .project-details {
+        width: 100%; /* Project details take full width */
+        border-left: none; /* Remove left border */
+        border-top: 1px solid #ddd; /* Add top border */
+        padding: 10px; /* Reduce padding */
+    }
+
+    .demo-button, .read-more-button {
+        padding: 8px 16px; /* Reduce button padding */
+    }
+
+    body {
+        padding: 10px; /* Reduce body padding */
+    }
+}
