@@ -1,12 +1,11 @@
+import eventlet
+eventlet.monkey_patch()
+
 from flask import Flask, render_template, session
 from extensions import socketio  # Import socketio from extensions.py
 from bullet_hell import bullet_hell_bp
 from finger_gun import finger_gun_bp
 import os
-import eventlet
-
-# Monkey patching for eventlet
-eventlet.monkey_patch()
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
