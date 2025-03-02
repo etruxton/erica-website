@@ -76,6 +76,7 @@ def process_frame(frame, session):
     results = hands.process(image)
     image.flags.writeable = True
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    
 
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
@@ -99,6 +100,9 @@ def process_frame(frame, session):
                     session['previous_thumb_y'] = current_thumb_y
                 if 'previous_time' not in session or session['previous_time'] is None:
                     session['previous_time'] = current_time
+
+                if 'previous_thumb_y' in session and len(session) > 100:  # Example threshold
+                    session.clear()
 
                 # Calculate thumb velocity
                 delta_time = current_time - session['previous_time']
@@ -161,6 +165,9 @@ def handle_frame(data):
 
         # Send the processed frame back to the client
         emit('processed_frame', {'processed_frame': processed_frame_base64})
+
+        # Explicitly free memory
+        del frame, frame_np, frame_bytes, processed_frame, processed_frame_bytes
 
     except Exception as e:
         logger.error(f"Error processing frame: {str(e)}")
