@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let lastFrameTime = 0;
 
     // Connect to the WebSocket server with the correct namespace
-    const socket = io('https://erica-website-7ae3b1131c2e.herokuapp.com/finger_gun/');
-
+    const socket = io('/finger_gun');
+    
     socket.on('connect', () => {
         console.log('Connected to WebSocket server');
     });
