@@ -162,7 +162,6 @@ def handle_frame(data):
     try:
         logger.debug("Received frame data from client")
 
-        # Decode and process the frame
         frame_bytes = base64.b64decode(data['frame'].encode('utf-8'))
         frame_np = np.frombuffer(frame_bytes, dtype=np.uint8)
         frame = cv2.imdecode(frame_np, cv2.IMREAD_COLOR)
@@ -173,12 +172,12 @@ def handle_frame(data):
             return
 
         processed_frame = process_frame(frame, session)
-        _, processed_frame_bytes = cv2.imencode('.jpg', processed_frame)
+
+        _, processed_frame_bytes = cv2.imencode('.jpg', processed_frame, [int(cv2.IMWRITE_JPEG_QUALITY), 70]) #adjust quality here.
         processed_frame_base64 = base64.b64encode(processed_frame_bytes).decode('utf-8')
 
         emit('processed_frame', {'processed_frame': processed_frame_base64})
 
-        # Explicitly free memory
         del frame, frame_np, frame_bytes, processed_frame, processed_frame_bytes
 
     except Exception as e:
