@@ -20,4 +20,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Run Gunicorn with eventlet worker for WebSocket support, using Heroku's $PORT
-CMD ["sh", "-c", "gunicorn -k eventlet -w 4 --bind 0.0.0.0:$PORT main:app"]
+CMD ["sh", "-c", "gunicorn -k eventlet -w 1 --bind 0.0.0.0:$PORT main:app"]
