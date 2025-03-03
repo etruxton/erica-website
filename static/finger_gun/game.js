@@ -15,26 +15,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const outputCanvas = document.getElementById('outputCanvas');
     const outputContext = outputCanvas.getContext('2d');
 
-    let targetFps = 30; // Initial FPS
+    let targetFps = 20; // Initial FPS
     let lastFrameTime = 0;
-    let sendTime = 0; // Timestamp when frame is sent
 
+    // Connect to the WebSocket server with the correct namespace
     const socket = io('/finger_gun');
-
+    
     socket.on('connect', () => {
         console.log('Connected to WebSocket server');
     });
 
     socket.on('processed_frame', (data) => {
-        const receiveTime = performance.now(); // Timestamp when frame is received
-        const responseTime = receiveTime - sendTime; // Calculate response time
-
-        if (responseTime > 50) {
-            targetFps = 10; // Drop FPS if response time is above 50ms
-        } else {
-            targetFps = 30; // Restore FPS if response time is below 50ms
-        }
-
         const processedImage = new Image();
         processedImage.src = 'data:image/jpeg;base64,' + data.processed_frame;
         processedImage.onload = () => {
@@ -62,10 +53,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         captureContext.drawImage(video, 0, 0, captureCanvas.width, captureCanvas.height);
 
-        const frameData = captureCanvas.toDataURL('image/jpeg', 0.7);
+        // Compress and encode the resized canvas
+        const frameData = captureCanvas.toDataURL('image/jpeg', 0.7); // Adjust quality
         const frameBase64 = frameData.split(',')[1];
 
-        sendTime = performance.now(); // Timestamp before sending
         socket.emit('frame', { frame: frameBase64 });
     }
 
@@ -87,16 +78,18 @@ document.addEventListener('DOMContentLoaded', function () {
     getWebcam();
 
     video.addEventListener('loadeddata', () => {
-        requestAnimationFrame(frameLoop);
+        requestAnimationFrame(frameLoop); // Start the frame loop
     });
 
-    const idleTimeout = 30000;
+    const idleTimeout = 30000; // 30 seconds
     socket.on('frame', (data) => {
+    // Reset the idle timer
         clearTimeout(socket.idleTimer);
         socket.idleTimer = setTimeout(() => {
-            socket.disconnect();
+            socket.disconnect(); // Close the connection
         }, idleTimeout);
 
+        // Process the frame
         handleFrame(data);
     });
 });
