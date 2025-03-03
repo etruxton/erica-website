@@ -15,8 +15,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const outputCanvas = document.getElementById('outputCanvas');
     const outputContext = outputCanvas.getContext('2d');
 
-    let targetFps = 15; // Initial FPS
+    let targetFps = 15; // 15 frames per second
     let lastFrameTime = 0;
+    let frameBuffer = []; // Buffer to store incoming frames
+    let isProcessingFrame = false; // Flag to prevent overlapping frame processing
+    const maxBufferSize = 1; // Maximum number of frames to buffer
 
     // Connect to the WebSocket server with the correct namespace
     const socket = io('/finger_gun');
@@ -26,11 +29,18 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     socket.on('processed_frame', (data) => {
-        const processedImage = new Image();
-        processedImage.src = 'data:image/jpeg;base64,' + data.processed_frame;
-        processedImage.onload = () => {
-            outputContext.drawImage(processedImage, 0, 0, outputCanvas.width, outputCanvas.height);
-        };
+        // Add the processed frame to the buffer
+        frameBuffer.push(data.processed_frame);
+
+        // If the buffer exceeds the maximum size, discard the oldest frame
+        if (frameBuffer.length > maxBufferSize) {
+            frameBuffer.shift(); // Remove the oldest frame
+        }
+
+        // If no frame is currently being processed, start processing the buffer
+        if (!isProcessingFrame) {
+            processFrameBuffer();
+        }
     });
 
     socket.on('error', (data) => {
@@ -73,6 +83,28 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         requestAnimationFrame(frameLoop);
+    }
+
+    function processFrameBuffer() {
+        if (frameBuffer.length === 0) {
+            isProcessingFrame = false; // No more frames to process
+            return;
+        }
+
+        isProcessingFrame = true;
+
+        // Get the next frame from the buffer
+        const processedFrameBase64 = frameBuffer.shift();
+
+        // Display the frame
+        const processedImage = new Image();
+        processedImage.src = 'data:image/jpeg;base64,' + processedFrameBase64;
+        processedImage.onload = () => {
+            outputContext.drawImage(processedImage, 0, 0, outputCanvas.width, outputCanvas.height);
+
+            // Schedule the next frame to be processed after the target frame delay
+            setTimeout(processFrameBuffer, 1000 / targetFps);
+        };
     }
 
     getWebcam();
