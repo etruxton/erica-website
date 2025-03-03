@@ -1,6 +1,6 @@
 from flask import Blueprint, session, render_template
 from flask_socketio import emit
-from extensions import socketio  # Import socketio from extensions.py
+from extensions import socketio
 import cv2
 import mediapipe as mp
 import numpy as np
@@ -8,6 +8,12 @@ import base64
 import math
 import logging
 import time
+from concurrent.futures import ThreadPoolExecutor
+from threading import local
+import os  # For suppressing logs
+
+# Suppress MediaPipe GPU logs
+os.environ['GLOG_minloglevel'] = '2'  # 0 = INFO, 1 = WARNING, 2 = ERROR, 3 = FATAL
 
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
@@ -19,7 +25,25 @@ finger_gun_bp = Blueprint('finger_gun', __name__, url_prefix='/finger_gun')
 # Global Mediapipe initialization
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
-hands = mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7)
+
+# Initialize MediaPipe Hands
+hands = mp_hands.Hands(
+    min_detection_confidence=0.7,
+    min_tracking_confidence=0.7,
+    static_image_mode=False,  # Set to False for video streams
+    model_complexity=1       # Use a simpler model to reduce CPU load
+)
+
+# Thread pool for frame processing
+executor = ThreadPoolExecutor(max_workers=4)
+
+# Thread-local storage for MediaPipe hands
+thread_local = local()
+
+def get_hands():
+    if not hasattr(thread_local, 'hands'):
+        thread_local.hands = hands
+    return thread_local.hands
 
 @finger_gun_bp.route('/')
 def index():
@@ -71,12 +95,15 @@ def is_finger_gun(hand_landmarks, frame_width, frame_height, session):
         return False, None, None, None, None
 
 def process_frame(frame, session):
+    # Clear session data if it grows too large
+    if len(session) > 100:  # Example threshold
+        session.clear()
+
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     image.flags.writeable = False
-    results = hands.process(image)
+    results = get_hands().process(image)  # Use thread-local hands
     image.flags.writeable = True
     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-    
 
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
@@ -100,9 +127,6 @@ def process_frame(frame, session):
                     session['previous_thumb_y'] = current_thumb_y
                 if 'previous_time' not in session or session['previous_time'] is None:
                     session['previous_time'] = current_time
-
-                if 'previous_thumb_y' in session and len(session) > 100:  # Example threshold
-                    session.clear()
 
                 # Calculate thumb velocity
                 delta_time = current_time - session['previous_time']
@@ -138,14 +162,8 @@ def handle_frame(data):
     try:
         logger.debug("Received frame data from client")
 
-        # Ensure the session is available
-        if not session:
-            logger.error("Session not available")
-            emit('error', {'error': 'Session not available'})
-            return
-
-        # Decode the Base64-encoded frame
-        frame_bytes = base64.b64decode(data['frame'])
+        # Decode and process the frame
+        frame_bytes = base64.b64decode(data['frame'].encode('utf-8'))
         frame_np = np.frombuffer(frame_bytes, dtype=np.uint8)
         frame = cv2.imdecode(frame_np, cv2.IMREAD_COLOR)
         frame = cv2.flip(frame, 1)
@@ -154,16 +172,10 @@ def handle_frame(data):
             emit('error', {'error': 'Invalid frame data'})
             return
 
-        logger.debug("Frame decoded successfully")
-
-        # Process the frame with session data
         processed_frame = process_frame(frame, session)
         _, processed_frame_bytes = cv2.imencode('.jpg', processed_frame)
         processed_frame_base64 = base64.b64encode(processed_frame_bytes).decode('utf-8')
 
-        logger.debug("Frame processed successfully")
-
-        # Send the processed frame back to the client
         emit('processed_frame', {'processed_frame': processed_frame_base64})
 
         # Explicitly free memory
