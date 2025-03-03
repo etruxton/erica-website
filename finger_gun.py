@@ -31,7 +31,8 @@ hands = mp_hands.Hands(
     min_detection_confidence=0.7,
     min_tracking_confidence=0.7,
     static_image_mode=False,  # Set to False for video streams
-    model_complexity=1       # Use a simpler model to reduce CPU load
+    model_complexity=1,       # Use a simpler model to reduce CPU load
+    max_num_hands=1          # Only detect one hand
 )
 
 # Thread pool for frame processing
