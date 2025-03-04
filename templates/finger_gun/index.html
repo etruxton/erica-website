@@ -6,6 +6,11 @@
 </head>
 <body>
     <canvas id="outputCanvas" width="640" height="480"></canvas>
+
+    <!-- Include the Socket.IO client library -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+    <!-- Include your game.js file -->
     <script src="{{ url_for('static', filename='finger_gun/game.js') }}"></script>
 </body>
 </html>
