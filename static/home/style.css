@@ -1,35 +1,42 @@
+body, html {
+    height: auto; /* Change to auto so content can expand */
+    min-height: 100%; /* Ensure at least viewport height */
+    margin: 0;
+    padding: 20px;
+    font-size: 16px;
+    box-sizing: border-box; /* Add box-sizing */
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f4f7f9;
-    margin: 0;
-    padding: 20px;
-    font-size: 16px; /* Fixed font size */
 }
 
 .header {
     display: flex;
-    flex-direction: column; /* Stack children vertically */
-    align-items: center; /* Center children horizontally */
-    text-align: center; /* Center text within the header */
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     margin-bottom: 30px;
-    min-width: 342px; /* Prevent squishing on small screens */
+    min-width: 342px;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 .header-top {
     display: flex;
-    align-items: center; /* Vertically center profile pic and h1 */
-    margin-bottom: 10px; /* Space between h1 and p */
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .header h1 {
     color: #333;
-    margin: 0; /* Remove default margin */
+    margin: 0;
 }
 
 .header p {
     color: #555;
     line-height: 1.6;
-    margin: 0; /* Remove default margin */
+    margin: 0;
 }
 
 .image-overlay {
@@ -46,6 +53,7 @@ body {
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s ease;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 .image-overlay.active {
@@ -57,28 +65,26 @@ body {
     max-width: 90%;
     max-height: 90%;
     object-fit: contain;
-    filter: none; /* Remove blur from the image */
+    filter: none;
 }
 
-body.blur .content { /* Apply blur to content div */
+body.blur .content {
     filter: blur(5px);
 }
 
-html, body { /* Make overlay cover whole body */
-    height: 100%;
-    margin: 0;
-    overflow: hidden; /* Prevent scrolling when overlay is active */
+body.overlay-active {
+    overflow: hidden;
 }
+
 .projects-container {
     display: flex;
     max-width: 900px;
     margin: 20px auto;
-    height: 150px; /* Set a fixed height */
-    overflow: hidden; /* Prevent content from overflowing */
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 .project-details {
-    width: 70%; /* Adjust width for text */
+    width: 70%;
     padding: 20px;
     border-left: 1px solid #ddd;
     box-sizing: border-box;
@@ -88,25 +94,26 @@ html, body { /* Make overlay cover whole body */
     margin-bottom: 15px;
     color: #555;
     font-size: 16px;
-    white-space: normal; /* Allow text wrapping */
+    white-space: normal;
 }
 
 .project-image-display {
-    width: 30%; /* Adjust width for image */
+    width: 30%;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 200px;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 .project-display-image {
     max-width: 90%;
     max-height: 90%;
     object-fit: contain;
-    transition: transform 0.3s ease, opacity 0.3s ease; /* Add opacity transition */
-    visibility: hidden; /* Hide by default */
-    pointer-events: none; /* Disable pointer events by default */
-    opacity: 0; /* Set opacity to 0 */
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    visibility: hidden;
+    pointer-events: none;
+    opacity: 0;
 }
 
 .project-display-image:hover {
@@ -115,26 +122,28 @@ html, body { /* Make overlay cover whole body */
 
 .project-display-image.fade-in {
     visibility: visible;
-    pointer-events: auto; /* Enable pointer events */
-    opacity: 1; /* Fade in */
+    pointer-events: auto;
+    opacity: 1;
 }
 
 .project-display-image.fade-out {
     visibility: hidden;
     pointer-events: none;
-    opacity: 0; /* Fade out */
+    opacity: 0;
 }
 
 .project-list {
     list-style: none;
     padding: 0;
     width: 30%;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 .project-item {
     padding: 10px 15px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 .project-item:hover {
@@ -152,9 +161,10 @@ html, body { /* Make overlay cover whole body */
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px; /* Fixed font size */
+    font-size: 16px;
     transition: background-color 0.3s ease;
     margin-right: 10px;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 .demo-button {
@@ -188,11 +198,11 @@ html, body { /* Make overlay cover whole body */
 .waving-emoji {
     display: inline-block;
     transition: transform 0.3s ease;
-    transform-origin: 70% 70%; /* Pivot around the bottom-left palm */
+    transform-origin: 70% 70%;
 }
 
 .waving-emoji:hover,
-.waving-emoji.waving { /* Add waving class */
+.waving-emoji.waving {
     animation: wave 0.8s infinite linear;
 }
 
@@ -204,11 +214,10 @@ html, body { /* Make overlay cover whole body */
     100% { transform: rotate(0deg); }
 }
 
-
 @property --my-border {
-    syntax: "<percentage>"; /* its type */
+    syntax: "<percentage>";
     inherits: false;
-    initial-value: 0%; /* the initial value */
+    initial-value: 0%;
 }
 
 .profile-pic-container {
@@ -216,6 +225,7 @@ html, body { /* Make overlay cover whole body */
     width: 70px;
     height: 70px;
     margin-right: 20px;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 .profile-pic {
@@ -239,7 +249,7 @@ html, body { /* Make overlay cover whole body */
         transparent 100%
     );
     transform: rotate(-180deg) scale(-1, 1);
-    transition: --my-border 1.5s ease, opacity 1.5s ease; /* Add opacity transition */
+    transition: --my-border 1.5s ease, opacity 1.5s ease;
 }
 
 .profile-pic-container:hover:after,
@@ -248,13 +258,14 @@ html, body { /* Make overlay cover whole body */
 }
 
 .confetti-container {
-    position: fixed; /* Cover the entire screen */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
     overflow: hidden;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 .confetti {
@@ -279,13 +290,15 @@ html, body { /* Make overlay cover whole body */
 
 .handwriting-recognition-container {
     text-align: center;
-    margin: 20px auto;
+    margin: 20px auto 50px; /* added margin-bottom */
     max-width: 600px;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 #drawingCanvas {
     border: 2px solid #ddd;
     margin-bottom: 10px;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 #clearButton, #recognizeButton {
@@ -297,7 +310,8 @@ html, body { /* Make overlay cover whole body */
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-    font-size: 16px; 
+    font-size: 16px;
+    box-sizing: border-box; /* Add box-sizing */
 }
 
 #clearButton:hover, #recognizeButton:hover {
@@ -314,77 +328,70 @@ html, body { /* Make overlay cover whole body */
 /* Media Queries for Mobile Responsiveness */
 @media (max-width: 720px) {
     .projects-container {
-        flex-direction: column; /* Stack project list and details vertically */
-        margin: 10px auto; /* Reduce margins */
-        height: 700px; /* Set a fixed height */
+        flex-direction: column;
+        margin: 10px auto;
+        height: auto; /* changed from 700px to auto */
     }
 
     .project-details {
-        width: 100%; /* Project details take full width */
-        border-left: none; /* Remove left border */
-        border-bottom: 1px solid #ddd; /* Add bottom border */
-        border-top: 1px solid #ddd; /* Add top border */
+        width: 100%;
+        border-left: none;
+        border-bottom: 1px solid #ddd;
+        border-top: 1px solid #ddd;
     }
 
     .project-image-display {
-        width: 100%; /* Image display takes full width */
-        min-height: 200px; /* Ensure space is reserved */
+        width: 100%;
+        min-height: 200px;
     }
 
     .project-display-image {
-        max-width: 80%; /* Limit image width */
-        max-height: 250px; /* Limit image height */
-        margin-top: 15px; /* Add spacing */
+        max-width: 80%;
+        max-height: 250px;
+        margin-top: 15px;
     }
 
     .handwriting-recognition-container {
-        max-width: 100%; /* Allow container to take full width */
-        padding: 0 10px; /* Reduce padding */
+        max-width: 100%;
+        padding: 0 10px;
     }
 
     #drawingCanvas {
-        max-width: 100%; /* Allow canvas to take full width */
-        height: auto; /* Adjust height proportionally */
-    }
-
-    #clearButton, #recognizeButton {
-        width: 100%; /* Make buttons full width */
-        max-width: none; /* Remove maximum width limit */
+        max-width: 100%;
+        height: auto;
     }
 }
 
-
 @media (max-width: 480px) {
-
     .project-list {
-        width: 100%; /* Project list takes full width */
+        width: 100%;
     }
 
     .project-details {
-        width: 100%; /* Project details take full width */
-        border-left: none; /* Remove left border */
-        border-top: 1px solid #ddd; /* Add top border */
-        padding: 10px; /* Reduce padding */
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid #ddd;
+        padding: 10px;
     }
 
     .demo-button, .read-more-button {
-        padding: 8px 16px; /* Reduce button padding */
+        padding: 8px 16px;
     }
 
     body {
-        padding: 10px; /* Reduce body padding */
+        padding: 10px;
     }
 
     .handwriting-recognition-container {
-        margin: 10px auto; /* Reduce margins */
+        margin: 10px auto;
     }
 
     #drawingCanvas {
-        border-width: 1px; /* Reduce border thickness */
+        border-width: 1px;
     }
 
     #clearButton, #recognizeButton {
-        padding: 8px 16px; /* Reduce button padding */
-        font-size: 14px; /* Reduce font size */
+        padding: 8px 16px;
+        font-size: 14px;
     }
 }
