@@ -277,6 +277,40 @@ html, body { /* Make overlay cover whole body */
     }
 }
 
+.handwriting-recognition-container {
+    text-align: center;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+#drawingCanvas {
+    border: 2px solid #ddd;
+    margin-bottom: 10px;
+}
+
+#clearButton, #recognizeButton {
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-size: 16px; 
+}
+
+#clearButton:hover, #recognizeButton:hover {
+    background-color: #0056b3;
+    transition: background-color 0.3s ease;
+}
+
+#resultDisplay {
+    margin-top: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
 /* Media Queries for Mobile Responsiveness */
 @media (max-width: 720px) {
     .projects-container {
@@ -302,6 +336,21 @@ html, body { /* Make overlay cover whole body */
         max-height: 250px; /* Limit image height */
         margin-top: 15px; /* Add spacing */
     }
+
+    .handwriting-recognition-container {
+        max-width: 100%; /* Allow container to take full width */
+        padding: 0 10px; /* Reduce padding */
+    }
+
+    #drawingCanvas {
+        max-width: 100%; /* Allow canvas to take full width */
+        height: auto; /* Adjust height proportionally */
+    }
+
+    #clearButton, #recognizeButton {
+        width: 100%; /* Make buttons full width */
+        max-width: none; /* Remove maximum width limit */
+    }
 }
 
 
@@ -324,5 +373,18 @@ html, body { /* Make overlay cover whole body */
 
     body {
         padding: 10px; /* Reduce body padding */
+    }
+
+    .handwriting-recognition-container {
+        margin: 10px auto; /* Reduce margins */
+    }
+
+    #drawingCanvas {
+        border-width: 1px; /* Reduce border thickness */
+    }
+
+    #clearButton, #recognizeButton {
+        padding: 8px 16px; /* Reduce button padding */
+        font-size: 14px; /* Reduce font size */
     }
 }

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+    <!-- Main Content -->
     <div class="content">
         <div class="header">
             <div class="header-top">
@@ -36,13 +37,25 @@
                 <img src="" alt="Project Image" class="project-display-image">
             </div>
         </div>
+
+        <div class="handwriting-recognition-container">
+            <h2>Handwriting Recognition</h2>
+            <canvas id="drawingCanvas" width="400" height="200"></canvas>
+            <br>
+            <button id="clearButton">Clear</button>
+            <button id="recognizeButton">Recognize</button>
+            <div id="resultDisplay"></div>
+        </div>
     </div>
 
+    <!-- Image Overlay -->
     <div class="image-overlay">
         <img src="" alt="Enlarged Image" class="enlarged-image">
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <script src="{{ url_for('static', filename='home/home.js') }}"></script>
+    <script src="{{ url_for('static', filename='home/text_recognition.js') }}"></script>
 </body>
 </html>
