@@ -1,3 +1,4 @@
+import gc # At the top of your file
 from flask import Blueprint, request, jsonify
 import cv2
 import numpy as np
@@ -97,6 +98,7 @@ def recognize_text():
                 _, img_encoded = cv2.imencode('.png', image)
                 return base64.b64encode(img_encoded).decode('utf-8')
 
+            gc.collect() # Place this at the end of your recognize_text function, before returning. This will help free up memory.
             return jsonify({
                 'text': recognized_text,
                 'original_image': image_to_base64(image_np),
