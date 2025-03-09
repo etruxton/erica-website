@@ -55,11 +55,14 @@ clearButton.addEventListener('click', () => {
     document.getElementById('resultDisplay').textContent = '';
 });
 
-// Recognize button functionality
 recognizeButton.addEventListener('click', () => {
     const imageData = canvas.toDataURL('image/png');
 
-    console.log('Data URL:', imageData);
+    // Display loading message
+    resultDisplay.textContent = 'Loading...';
+
+    // Disable the recognize button
+    recognizeButton.disabled = true;
 
     fetch('/recognize_text', {
         method: 'POST',
@@ -69,33 +72,36 @@ recognizeButton.addEventListener('click', () => {
         body: JSON.stringify({ image: imageData }),
     })
     .then(response => {
-        console.log('Fetch response:', response);
         return response.json();
     })
     .then(data => {
+        // Clear loading message
+        resultDisplay.textContent = '';
+
         if (data.annotated_image) {
-            // Display the annotated image on the canvas
             const img = new Image();
             img.src = `data:image/png;base64,${data.annotated_image}`;
             img.onload = () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                isAnnotated = true; // Set the annotated image flag
-
-                // Disable the recognize button
-                recognizeButton.disabled = true;
+                isAnnotated = true;
+                recognizeButton.disabled = true; // Keep disabled after success
             };
 
-            // Display the recognized text
             if (data.text) {
-                document.getElementById('resultDisplay').textContent = 'Recognized text: ' + data.text;
+                resultDisplay.textContent = 'Recognized text: ' + data.text;
             }
         } else if (data.error) {
-            document.getElementById('resultDisplay').textContent = 'Error: ' + data.error;
+            resultDisplay.textContent = 'Error: ' + data.error;
         }
     })
     .catch(error => {
-        console.error('Fetch error:', error);
-        document.getElementById('resultDisplay').textContent = 'An error occurred.';
+        resultDisplay.textContent = 'An error occurred.';
+    })
+    .finally(() => {
+        // Re-enable the recognize button if not successful
+        if (!isAnnotated) {
+            recognizeButton.disabled = false;
+        }
     });
 });
