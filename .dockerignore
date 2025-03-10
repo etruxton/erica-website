@@ -13,3 +13,6 @@ env/
 # Ignore local logs and data
 logs/
 data/
+
+#Old easyocr_models easyocr_models
+easyocr_models/

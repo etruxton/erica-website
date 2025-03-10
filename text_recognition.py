@@ -1,59 +1,62 @@
 import gc
-import logging
-from concurrent.futures import ThreadPoolExecutor
-from io import BytesIO
-
-import base64
-import cv2
-import easyocr
-import numpy as np
 from flask import Blueprint, request, jsonify
+import cv2
+import numpy as np
+import base64
+from io import BytesIO
 from PIL import Image
+import logging
+import os
+import tempfile
+
+from google.cloud import vision_v1
+from google.protobuf.json_format import MessageToDict
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 text_recognition_bp = Blueprint('text_recognition', __name__)
 
-# Create a thread pool executor for concurrent processing
-executor = ThreadPoolExecutor(4)  # Adjust the number of threads as needed
+# Set Google credentials from environment variable
+google_credentials_base64 = os.environ.get("GOOGLE_CREDENTIALS_BASE64")
+if google_credentials_base64:
+    try:
+        credentials_json = base64.b64decode(google_credentials_base64).decode("utf-8")
+        with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".json") as temp_cred_file:
+            temp_cred_file.write(credentials_json)
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = temp_cred_file.name
+            logging.info("Google credentials loaded from environment variable.")
+    except Exception as e:
+        logging.error(f"Error loading Google credentials: {e}")
+else:
+    logging.error("GOOGLE_CREDENTIALS_BASE64 environment variable not set.")
 
-# Initialize EasyOCR reader with the model directory
-reader = easyocr.Reader(['en'], model_storage_directory='/root/.EasyOCR/model')
+# Initialize Google Vision client
+client = vision_v1.ImageAnnotatorClient()
 
-# Function to draw bounding boxes and confidence scores
 def draw_bounding_boxes(image_np, results):
-    # ... (your draw_bounding_boxes function remains the same)
-    for (bbox, text, prob) in results:
-        # Unpack the bounding box
-        (top_left, top_right, bottom_right, bottom_left) = bbox
-        top_left = tuple(map(int, top_left))
-        bottom_right = tuple(map(int, bottom_right))
+    for page in results.pages:
+        for block in page.blocks:
+            for paragraph in block.paragraphs:
+                for word in paragraph.words:
+                    word_text = "".join([symbol.text for symbol in word.symbols])
+                    confidence = word.confidence
+                    vertices = word.bounding_box.vertices
 
-        # Draw the bounding box
-        cv2.rectangle(image_np, top_left, bottom_right, (0, 255, 0), 2)  # Green box with thickness 2
+                    if len(vertices) == 4:
+                        top_left = (vertices[0].x, vertices[0].y)
+                        bottom_right = (vertices[2].x, vertices[2].y)
 
-        # Add the confidence score above the bounding box
-        confidence_text = f"{text} ({prob * 100:.2f}%)"
-        font_scale = 1  # Smaller font size
-        font_thickness = 1  # Thinner font
-        text_offset = 5  # Move text closer to the bounding box
+                        cv2.rectangle(image_np, top_left, bottom_right, (0, 255, 0), 2)
 
-        # Calculate text size to position it properly
-        (text_width, text_height), _ = cv2.getTextSize(confidence_text, cv2.FONT_HERSHEY_COMPLEX_SMALL, font_scale,
-                                                     font_thickness)
+                        text_offset = 5
+                        text_x = top_left[0]
+                        text_y = top_left[1] - text_offset
 
-        # Adjust text position to avoid going out of the image
-        text_x = top_left[0]
-        text_y = top_left[1] - text_offset
+                        # Add confidence score to the text
+                        confidence_text = f"{word_text} ({confidence * 100:.2f}%)"
 
-        # Ensure text stays within the image bounds
-        if text_y < text_height:
-            text_y = top_left[1] + text_height + text_offset
-
-        # Draw the text
-        cv2.putText(image_np, confidence_text, (text_x, text_y),
-                    cv2.FONT_HERSHEY_COMPLEX_SMALL, font_scale, (0, 255, 0), font_thickness)
+                        cv2.putText(image_np, confidence_text, (text_x, text_y), cv2.FONT_HERSHEY_COMPLEX_SMALL, 1, (0, 255, 0), 1)
     return image_np
 
 @text_recognition_bp.route('/recognize_text', methods=['POST'])
@@ -80,36 +83,40 @@ def recognize_text():
             kernel = np.ones((1, 1), np.uint8)
             dilated = cv2.dilate(gray, kernel, iterations=1)
             eroded = cv2.erode(dilated, kernel, iterations=1)
-
             # Apply adaptive thresholding
             thresh = cv2.adaptiveThreshold(eroded, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
 
             logging.debug("Preprocessed image")
 
-            # Submit the OCR task to the thread pool
-            future = executor.submit(reader.readtext, thresh)
+            # Convert the preprocessed image to bytes for Google Vision API
+            _, img_encoded = cv2.imencode('.png', thresh)
+            image_bytes_vision = img_encoded.tobytes()
 
-            # Use EasyOCR to recognize text
-            results = future.result()
+            # Create a Google Vision Image object
+            image_vision = vision_v1.Image(content=image_bytes_vision)
+
+            # Recognize text using Google Vision API (document_text_detection)
+            response = client.document_text_detection(image=image_vision)
+            results = response.full_text_annotation
 
             # Extract recognized text
-            recognized_text = " ".join([result[1] for result in results])  # Combine all detected text
+            recognized_text = response.full_text_annotation.text if response.full_text_annotation else ""
 
             logging.debug(f"Recognized text: {recognized_text}")
+
+            # Draw bounding boxes on the original image
+            annotated_image = draw_bounding_boxes(image_np.copy(), results)
 
             # Check if any text was recognized
             if not recognized_text:
                 recognized_text = "No text recognized."
-
-            # Draw bounding boxes and confidence scores on the original image
-            annotated_image = draw_bounding_boxes(image_np.copy(), results)
 
             # Convert processed images to base64 for display
             def image_to_base64(image):
                 _, img_encoded = cv2.imencode('.png', image)
                 return base64.b64encode(img_encoded).decode('utf-8')
 
-            gc.collect()  # Place this at the end of your recognize_text function, before returning. This will help free up memory.
+            gc.collect()
             return jsonify({
                 'text': recognized_text,
                 'original_image': image_to_base64(image_np),

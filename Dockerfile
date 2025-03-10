@@ -15,10 +15,7 @@ ENV GLOG_minloglevel=2
 
 # Copy requirements and install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy pre-downloaded EasyOCR models
-COPY easyocr_models /root/.EasyOCR/model
+RUN pip install --no-cache-dir -r requirements.txt 
 
 # Expose the Flask port
 EXPOSE 5000
