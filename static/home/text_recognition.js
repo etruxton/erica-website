@@ -1,28 +1,51 @@
 const canvas = document.getElementById('drawingCanvas');
 const ctx = canvas.getContext('2d');
-const recognizeButton = document.getElementById('recognizeButton'); // Get the recognize button
-const clearButton = document.getElementById('clearButton'); // Get the clear button
+const recognizeButton = document.getElementById('recognizeButton');
+const clearButton = document.getElementById('clearButton');
 let isDrawing = false;
-let isAnnotated = false; // Track if the annotated image is displayed
+let isAnnotated = false;
 
-// Set canvas background to white
 ctx.fillStyle = 'white';
 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-// Drawing functionality
+// Mouse Events
 canvas.addEventListener('mousedown', (e) => {
-    if (isAnnotated) return; // Disable drawing if annotated image is displayed
+    if (isAnnotated) return;
     isDrawing = true;
     draw(e.offsetX, e.offsetY);
 });
 
 canvas.addEventListener('mousemove', (e) => {
-    if (!isDrawing || isAnnotated) return; // Disable drawing if annotated image is displayed
+    if (!isDrawing || isAnnotated) return;
     draw(e.offsetX, e.offsetY);
 });
 
 canvas.addEventListener('mouseup', () => {
-    if (isAnnotated) return; // Disable drawing if annotated image is displayed
+    if (isAnnotated) return;
+    isDrawing = false;
+    ctx.beginPath();
+});
+
+// Touch Events
+canvas.addEventListener('touchstart', (e) => {
+    if (isAnnotated) return;
+    isDrawing = true;
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    draw(touch.clientX - rect.left, touch.clientY - rect.top);
+    e.preventDefault(); // Prevent scrolling
+}, { passive: false });
+
+canvas.addEventListener('touchmove', (e) => {
+    if (!isDrawing || isAnnotated) return;
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    draw(touch.clientX - rect.left, touch.clientY - rect.top);
+    e.preventDefault(); // Prevent scrolling
+}, { passive: false });
+
+canvas.addEventListener('touchend', () => {
+    if (isAnnotated) return;
     isDrawing = false;
     ctx.beginPath();
 });
@@ -38,30 +61,18 @@ function draw(x, y) {
     ctx.moveTo(x, y);
 }
 
-// Clear button functionality
 clearButton.addEventListener('click', () => {
-    // Clear canvas and reset background to white
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'white';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Reset the annotated image flag
     isAnnotated = false;
-
-    // Re-enable the recognize button
     recognizeButton.disabled = false;
-
-    // Clear the result display
     document.getElementById('resultDisplay').textContent = '';
 });
 
 recognizeButton.addEventListener('click', () => {
     const imageData = canvas.toDataURL('image/png');
-
-    // Display loading message
     resultDisplay.textContent = 'Loading...';
-
-    // Disable the recognize button
     recognizeButton.disabled = true;
 
     fetch('/recognize_text', {
@@ -71,13 +82,9 @@ recognizeButton.addEventListener('click', () => {
         },
         body: JSON.stringify({ image: imageData }),
     })
-    .then(response => {
-        return response.json();
-    })
+    .then(response => response.json())
     .then(data => {
-        // Clear loading message
         resultDisplay.textContent = '';
-
         if (data.annotated_image) {
             const img = new Image();
             img.src = `data:image/png;base64,${data.annotated_image}`;
@@ -85,9 +92,8 @@ recognizeButton.addEventListener('click', () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                 isAnnotated = true;
-                recognizeButton.disabled = true; // Keep disabled after success
+                recognizeButton.disabled = true;
             };
-
             if (data.text) {
                 resultDisplay.textContent = 'Recognized text: ' + data.text;
             }
@@ -99,7 +105,6 @@ recognizeButton.addEventListener('click', () => {
         resultDisplay.textContent = 'An error occurred.';
     })
     .finally(() => {
-        // Re-enable the recognize button if not successful
         if (!isAnnotated) {
             recognizeButton.disabled = false;
         }
