@@ -277,6 +277,79 @@ body.overlay-active {
     padding: 5px;
 }
 
+.card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin: 20px auto; /* Center the card */
+    max-width: 600px; /* Adjust as needed */
+    box-sizing: border-box;
+}
+
+.capybara {
+    position: absolute;
+    top: 65px; /* Adjust this value to fine-tune vertical positioning */
+    left: 10px; /* Adjust this value to align with the start of the input text */
+    z-index: 1;
+    pointer-events: none;
+    width: auto; /* Maintain aspect ratio */
+}
+
+.typing-container {
+    position: relative; /* Ensure the capybara is positioned relative to this container */
+    text-align: center;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.typing-container input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 70px; /* Increased margin to accommodate capybara and text */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.typing-container p:first-child {
+    margin-top: 10px; /* Add margin to create space between text and container top */
+    color: grey;
+}
+
+.typing-container .correct {
+    color: black;
+}
+
+.typing-container .incorrect {
+    color: red;
+}
+
+.typing-container p:nth-child(3) {
+    color: black;
+}
+
+.typing-container .timer-indicator-container {
+    display: flex;
+    justify-content: space-between; /* Distribute space between items */
+    align-items: center; /* Vertically align items */
+    margin-top: 5px; /* Add margin for spacing */
+}
+
+.typing-container .restart-indicator {
+    font-size: 0.8em;
+    color: #888;
+}
+
+.typing-container .timer-display {
+    font-size: 0.9em;
+}
+
 @keyframes confetti-explode {
     0% {
         opacity: 1;
