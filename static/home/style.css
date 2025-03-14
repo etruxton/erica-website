@@ -467,4 +467,25 @@ body.overlay-active {
         padding: 8px 16px;
         font-size: 14px;
     }
+
+    .capybara {
+        position: absolute;
+        height: 50px; /* Smaller size for smaller screens */
+        top: 85px; /* Default position for smaller screens */
+        left: 10px; /* Adjust this value to align with the start of the input text */
+        z-index: 1; /* Ensure it's above the input box */
+        pointer-events: none; /* Prevent the capybara from interfering with input box clicks */
+        transition: top 0.3s ease; /* Smooth transition for position changes */
+    }
+}
+@media (max-width: 420px) {
+    .capybara {
+        position: absolute;
+        height: 50px; /* Smaller size for smaller screens */
+        top: 105px; /* Default position for smaller screens */
+        left: 10px; /* Adjust this value to align with the start of the input text */
+        z-index: 1; /* Ensure it's above the input box */
+        pointer-events: none; /* Prevent the capybara from interfering with input box clicks */
+        transition: top 0.3s ease; /* Smooth transition for position changes */
+    }
 }

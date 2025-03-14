@@ -46,14 +46,23 @@ document.addEventListener('DOMContentLoaded', function () {
     let congratsInterval; // Interval for the celebration animation
 
     function updateCapybara() {
+        // Determine the movement distance based on screen width
+        const movementDistance = window.innerWidth < 480 ? 5 : 10; // Move less on smaller screens
+    
         // Advance the frame (loop back to 0 after frame 3)
         capybaraFrame = (capybaraFrame + 1) % 4;
         capybara.src = `static/home/assets/images/capybara_${capybaraFrame}.png`;
-
-        // Move the capybara a small amount
-        capybaraPosition += 10; // Adjust the increment as needed
+    
+        // Move the capybara
+        capybaraPosition += movementDistance; // Adjust the increment based on screen width
         capybara.style.left = `${capybaraPosition}px`;
     }
+    
+    window.addEventListener('resize', function () {
+        // Reset the capybara's position when the screen is resized
+        capybaraPosition = 10; // Reset position
+        capybara.style.left = `${capybaraPosition}px`;
+    });
 
     function resetTest() {
         inputField.value = "";
