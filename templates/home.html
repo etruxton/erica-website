@@ -4,9 +4,15 @@
     <title>Home - Erica Truxton's App Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='home/style.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="images/site.webmanifest">
+    <link rel="icon" href="images/favicon.ico" sizes="any">
 </head>
 <body>
     <!-- Main Content -->
+    <canvas id="background-canvas"></canvas>
     <div class="content">
         <div class="header">
             <div class="header-top">
@@ -58,5 +64,6 @@
     <script src="{{ url_for('static', filename='home/home.js') }}"></script>
     <script src="{{ url_for('static', filename='home/text_recognition.js') }}"></script>
     <script src="{{ url_for('static', filename='home/typing_speed.js') }}"></script>
+    <script src="{{ url_for('static', filename='home/particle_background.js') }}"></script> </body>
 </body>
 </html>

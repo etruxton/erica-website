@@ -12,6 +12,16 @@ body {
     background-color: #f4f7f9;
 }
 
+#background-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Place it behind other content */
+    pointer-events: none; /* Prevent it from interfering with clicks */
+}
+
 .header {
     display: flex;
     flex-direction: column;
@@ -249,7 +259,7 @@ body.overlay-active {
         transparent 100%
     );
     transform: rotate(-180deg) scale(-1, 1);
-    transition: --my-border 1.5s ease, opacity 1.5s ease;
+    transition: --my-border 2.5s ease, opacity 2.5s ease;
 }
 
 .profile-pic-container:hover:after,
