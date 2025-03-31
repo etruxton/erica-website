@@ -382,6 +382,11 @@ body.overlay-active {
     border: 2px solid #ddd;
     margin-bottom: 10px;
     box-sizing: border-box; /* Add box-sizing */
+    cursor: default; /* Default cursor */
+}
+
+#drawingCanvas.drawing-active {
+    cursor: url("assets/images/pencil.png") 0 24, auto; /* Pencil cursor */
 }
 
 #clearButton, #recognizeButton {
@@ -403,8 +408,7 @@ body.overlay-active {
 }
 
 #resultDisplay {
-    margin-top: 15px;
-    font-weight: bold;
+    margin-top: 16px;
     color: #333;
 }
 
