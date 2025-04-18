@@ -14,10 +14,13 @@ ENV GLOG_minloglevel=2
 
 # Copy requirements and install Python dependencies
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt 
+
+# Expose the Flask port
+EXPOSE 5000
 
 # Copy the rest of the application code
 COPY . .
 
-# Run Gunicorn with eventlet worker for WebSocket support, using Heroku's $PORT
-CMD ["sh", "-c", "gunicorn -k eventlet -w 1 --bind 0.0.0.0:$PORT main:app"]
+# Run Gunicorn with eventlet worker for WebSocket support
+CMD ["sh", "-c", "gunicorn -k eventlet -w 1 --bind 0.0.0.0:${PORT:-5000} main:app"]

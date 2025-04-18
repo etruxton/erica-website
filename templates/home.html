@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home - Erica Truxton's App Dashboard</title>
+    <title>Erica Truxton</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='home/style.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='images/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='images/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='images/site.webmanifest') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}" sizes="any">
 </head>
 <body>
+    <!-- Main Content -->
+    <canvas id="background-canvas"></canvas>
     <div class="content">
         <div class="header">
             <div class="header-top">
@@ -36,13 +43,27 @@
                 <img src="" alt="Project Image" class="project-display-image">
             </div>
         </div>
+
+        <div class="handwriting-recognition-container">
+            <h2>Handwriting Recognition</h2>
+            <p id="resultDisplay"></p>
+            <canvas id="drawingCanvas" width="600" height="300"></canvas>
+            <br>
+            <button id="clearButton">Clear</button>
+            <button id="recognizeButton">Recognize</button>
+        </div>
     </div>
 
+    <!-- Image Overlay -->
     <div class="image-overlay">
         <img src="" alt="Enlarged Image" class="enlarged-image">
     </div>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
     <script src="{{ url_for('static', filename='home/home.js') }}"></script>
+    <script src="{{ url_for('static', filename='home/text_recognition.js') }}"></script>
+    <script src="{{ url_for('static', filename='home/typing_speed.js') }}"></script>
+    <script src="{{ url_for('static', filename='home/particle_background.js') }}"></script> </body>
 </body>
 </html>

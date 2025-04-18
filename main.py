@@ -1,3 +1,4 @@
+# main.py
 import eventlet
 eventlet.monkey_patch()
 
@@ -5,6 +6,7 @@ from flask import Flask, render_template, session
 from extensions import socketio  # Import socketio from extensions.py
 from bullet_hell import bullet_hell_bp
 from finger_gun import finger_gun_bp
+from text_recognition import text_recognition_bp #Import text_recognition blueprint
 import os
 
 app = Flask(__name__)
@@ -13,6 +15,7 @@ app.secret_key = os.urandom(24)
 # Register Blueprints
 app.register_blueprint(bullet_hell_bp)
 app.register_blueprint(finger_gun_bp)
+app.register_blueprint(text_recognition_bp) #Register text_recognition blueprint
 
 # Initialize SocketIO with the app
 socketio.init_app(app, cors_allowed_origins="*")
