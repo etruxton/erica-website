@@ -2,12 +2,11 @@ FROM python:3.11-slim-buster
 
 WORKDIR /app
 
-# Install system dependencies, including Tesseract and language packs
+# Install system dependencies
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     libgl1 \
     libgl1-mesa-glx \
     libglib2.0-0 \
-    libleptonica-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Set environment variable to suppress MediaPipe GPU warnings
