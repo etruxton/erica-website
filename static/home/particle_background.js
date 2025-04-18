@@ -16,18 +16,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const maxFadeDelay = 10000;
     const smallScreenWidth = 480; // Threshold for smaller screen
 
-    function resizeCanvas() {
+    function setCanvasSize() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
-        // Adjust particle count based on screen width
-        if (window.innerWidth < smallScreenWidth) {
-            particleCount = 30; // Fewer particles for small screens
-        } else {
-            particleCount = 75; // Default particle count for larger screens
-        }
-
-        createParticles(); // Recreate particles with the new count
+        console.log('Canvas resized to:', canvas.width, canvas.height); // Debugging log
     }
 
     function createParticles() {
@@ -52,6 +44,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 fadeProgress: 0
             });
         }
+        console.log('Particles created:', particles.length); // Debugging log
+    }
+
+    function resizeCanvas() {
+        setCanvasSize();
+        // Adjust particle count based on screen width
+        if (window.innerWidth < smallScreenWidth) {
+            particleCount = 30; // Fewer particles for small screens
+        } else {
+            particleCount = 75; // Default particle count for larger screens
+        }
+        createParticles();
     }
 
     function drawParticles() {
@@ -137,17 +141,16 @@ document.addEventListener('DOMContentLoaded', function () {
         requestAnimationFrame(animate);
     }
 
-    resizeCanvas();
+    // Initial setup
+    setCanvasSize();
     createParticles();
     animate();
 
-    window.addEventListener('resize', () => {
-        resizeCanvas();
-    });
+    window.addEventListener('resize', resizeCanvas);
 
     window.addEventListener('mousemove', (event) => {
-        mouseX = event.clientX;
-        mouseY = event.clientY;
+        mouseX = event.clientX + window.scrollX;
+        mouseY = event.clientY + window.scrollY;
     });
 
     window.addEventListener('mouseout', () => {
